@@ -1,0 +1,25 @@
+{
+  "name": "nishiwaki-logophoto",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.3.0",
+    "gulp-watch": "^4.3.11",
+    "gulp-webserver": "^0.9.1",
+    "livescript": "^1.5.0",
+    "run-sequence": "^1.2.2",
+    "vulcanize": "^1.15.4"
+  },
+  "scripts": {
+    "dev": "gulp dev",
+    "build": "gulp build && $(yarn bin)/vulcanize dist/index.html --out-html dist/index.html --inline-scripts"
+  }
+}

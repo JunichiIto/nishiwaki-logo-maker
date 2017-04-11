@@ -1,0 +1,16 @@
+link(rel="import" href="../../bower_components/polymer/polymer.html")
+link(rel="import" href="../../bower_components/paper-input/paper-input.html")
+
+dom-module#nishiwaki-logo-composer
+  template
+    style(is="custom-style").
+      :host {
+        display: block;
+        width: 425px;
+      }
+    .canvas
+      canvas#canvas(width="[[width]]", height="[[height]]")
+    .hoge
+      paper-input(type="file" on-change="setFile" accept="image/jpeg, image/png")
+      paper-input(label="お名前" type="text" value="{{text}}")
+  script(src="./nishiwaki-logo-composer.js")

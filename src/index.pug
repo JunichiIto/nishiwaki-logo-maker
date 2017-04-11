@@ -1,0 +1,22 @@
+doctype html
+html(lang="ja")
+  head
+    title ニシワキ ロゴフォト
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width,initial-scale=1")
+    meta(name="format-detection" content="telephone=no")
+    link(rel="import" href="./bower_components/paper-styles/paper-styles.html")
+    link(rel="import" href="./bower_components/paper-header-panel/paper-header-panel.html")
+    link(rel="import" href="./bower_components/paper-toolbar/paper-toolbar.html")
+    link(rel="import" href="./bower_components/iron-flex-layout/iron-flex-layout-classes.html")
+    link(rel="import" href="./components/nishiwaki-logo-composer/nishiwaki-logo-composer.html")
+    script(src="./bower_components/webcomponentsjs/webcomponents-lite.min.js")
+  body.fullbleed.vertical.layout
+    paper-header-panel
+      paper-toolbar
+        h2 ニシワキ フォトロゴ
+      main.layout.vertical
+        section.layout.horizontal.center-justified
+          h3 ロゴと写真とテキストをいい感じに合成します。
+        section.flex.layout.horizontal.center-justified
+          nishiwaki-logo-composer
