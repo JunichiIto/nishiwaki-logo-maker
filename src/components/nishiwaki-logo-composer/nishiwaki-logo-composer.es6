@@ -11,17 +11,20 @@ Polymer({
     },
     text: {
       value: "西脇 太郎"
+    },
+    isDragging: {
+      value: false
     }
   },
   observers: [
     "drawLogo(logo)",
-    "setImage(file)",
-    "render(ctx, logo, image, text)",
+    "setImageUrl(file)",
+    "setImage(imageUrl)",
+    "setHandleSize(image)",
+    "render(ctx, logo, image, text, x, y, w, h)",
     "drawText(textImage)"
   ],
   attached() {
-    this.set("width", baseSize)
-    this.set("height", baseSize)
     this.setLogo()
     this.setCtx()
   },
@@ -36,32 +39,48 @@ Polymer({
   clear() {
     this.ctx.clearRect(0, 0, baseSize, baseSize)
   },
-  render(ctx, logo, image, text) {
+  setHandleSize(image) {
+    if (!image) return
+    const {width, height} = image
+    const {min, max} = Math
+    const rate = min(1, baseSize / max(width, height))
+    this.set("w", width * rate)
+    this.set("h", height * rate)
+  },
+  render(ctx, logo, image, text, x, y, w, h) {
     this.clear()
-    this.drawImage(image)
+    this.drawImage(image, x, y, w, h)
     this.drawLogo(logo)
     this.createTextImage(text)
   },
-  setImage(file) {
+  setImageUrl(file) {
     if (!file) return
     const reader = new FileReader()
-    const image = new Image()
     reader.onload = ({target: {result}})=> {
-      image.src = result
-    }
-    image.onload = ()=> {
-      this.set("image", image)
+      this.set("imageUrl", result)
     }
     reader.readAsDataURL(file)
   },
-  drawImage(image) {
+  setImage(imageUrl) {
+    if (!imageUrl) return
+    const image = new Image()
+    image.onload = ()=> {
+      this.set("image", image)
+    }
+    image.src = imageUrl
+  },
+  drawImage(image, x, y, w, h) {
     if (!image) return
-    const {width, height} = image
-    const sliceSize = Math.min(width, height)
     const offsetRate = 0.15
     const offset = baseSize * offsetRate
-    const size = baseSize * (1 - offsetRate * 2)
-    this.ctx.drawImage(image, (width - sliceSize) / 2, (height - sliceSize) / 2, sliceSize, sliceSize, offset, offset, size, size)
+    const maskSize = baseSize - offset * 2
+    this.ctx.save()
+    this.ctx.beginPath()
+    this.ctx.rect(offset, offset, maskSize, maskSize)
+    this.ctx.closePath()
+    this.ctx.clip()
+    this.ctx.drawImage(image, x, y, w, h)
+    this.ctx.restore()
   },
   setLogo(file) {
     const image = new Image()
@@ -101,6 +120,33 @@ Polymer({
     ctx.translate(- w / 2, - h / 2)
     drawTrapezoid(ctx, textImage, 50)
     ctx.setTransform(1, 0, 0, 1, 0, 0)
+  },
+  download() {
+    const a = document.createElement("a")
+    a.href = this.$.canvas.toDataURL()
+    a.download = `西脇市ロゴ ${this.text}.png`
+    a.click()
+  },
+  onDragover(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    event.dataTransfer.dropEffect = "copy"
+  },
+  onDrop(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    const {dataTransfer: {files: [file]}} = event
+    this.set("file", file)
+    this.set("isDragging", false)
+  },
+  setDragging(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.set("isDragging", true)
+  },
+  unsetDragging(event) {
+    event.preventDefault()
+    event.stopPropagation()
   },
 })
 // TODO: リファクタ

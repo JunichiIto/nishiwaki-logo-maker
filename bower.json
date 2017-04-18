@@ -24,6 +24,7 @@
     "paper-input": "PolymerElements/paper-input#~1.1.23",
     "paper-icon-button": "PolymerElements/paper-icon-button#~1.1.4",
     "paper-toolbar": "PolymerElements/paper-toolbar#~1.1.7",
-    "polymer": "~1.8.1"
+    "polymer": "~1.8.1",
+    "interactjs": "~1.2.8"
   }
 }

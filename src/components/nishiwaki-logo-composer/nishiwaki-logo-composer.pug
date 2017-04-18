@@ -1,16 +1,65 @@
 link(rel="import" href="../../bower_components/polymer/polymer.html")
 link(rel="import" href="../../bower_components/paper-input/paper-input.html")
+link(rel="import" href="../../bower_components/paper-button/paper-button.html")
+link(rel="import" href="../interact-component/interact-component.html")
 
 dom-module#nishiwaki-logo-composer
   template
     style(is="custom-style").
       :host {
         display: block;
-        width: 425px;
       }
-    .canvas
-      canvas#canvas(width="[[width]]", height="[[height]]")
-    .hoge
-      paper-input(type="file" on-change="setFile" accept="image/jpeg, image/png")
+      .container {
+        width: 425px;
+        height: 425px;
+        position: relative;
+        overflow: hidden;
+      }
+      .container .drop-range {
+        box-sizing: border-box;
+      }
+      .container .drop-range .drop-me {
+        color: #ccc;
+        margin-bottom: 50px;
+      }
+      .container[dragging] .drop-range {
+        border: 5px dashed #ccc;
+      }
+      .container canvas {
+        z-index: 2;
+        pointer-events: none;
+      }
+      .container:hover canvas {
+        opacity: 0.5;
+      }
+      .container .image {
+        position: absolute;
+        top: 64px;
+        left: 64px;
+        width: calc(100% - 128px);
+        height: calc(100% - 128px);
+        z-index: 1;
+      }
+      .container:not(:hover) .image {
+        overflow: hidden;
+      }
+      .container interact-component {
+        position: absolute;
+        top: -64px;
+        left: -64px;
+      }
+      paper-button {
+        background-color: var(--primary-color);
+        color: white;
+      }
+    .container(on-dragenter="setDragging" on-dragleave="unsetDragging" on-dragover="onDragover" on-drop="onDrop" dragging$="[[isDragging]]")
+      .drop-range.layout.horizontal.center.center-justified.fit
+        .drop-me(hidden$="[[file]]") ここに画像をドロップ
+      canvas#canvas.fit(width="425", height="425")
+      .image
+        interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}")
+          img(src$="[[imageUrl]]")
+    .layout.vertical.center-justified
       paper-input(label="お名前" type="text" value="{{text}}")
+      paper-button(on-tap="download" raised) 画像をダウンロード
   script(src="./nishiwaki-logo-composer.js")
