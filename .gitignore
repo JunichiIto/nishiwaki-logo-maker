@@ -3,3 +3,4 @@
 /dist/*
 !/www/bower_components
 !/www/lib
+.vim*
