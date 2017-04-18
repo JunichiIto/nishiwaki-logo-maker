@@ -125,6 +125,8 @@ Polymer({
     const a = document.createElement("a")
     a.href = this.$.canvas.toDataURL()
     a.download = `西脇市ロゴ ${this.text}.png`
+    a.style.display = "none"
+    this.appendChild(a)
     a.click()
   },
   onDragover(event) {
@@ -135,7 +137,9 @@ Polymer({
   onDrop(event) {
     event.preventDefault()
     event.stopPropagation()
-    const {dataTransfer: {files: [file]}} = event
+    window.dataTransfer = event.dataTransfer
+    const {dataTransfer: {files}} = event
+    const file = files[0]
     this.set("file", file)
     this.set("isDragging", false)
   },
