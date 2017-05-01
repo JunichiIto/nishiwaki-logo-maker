@@ -40,7 +40,7 @@ Polymer({
     this.setCtx()
   },
   setMobile() {
-    const this.set("isMobile", ["Android", "iOS", "Windows Phone"].indexOf(platform.os.family) >= 0)
+    this.set("isMobile", ["Android", "iOS", "Windows Phone"].indexOf(platform.os.family) >= 0)
     if (this.isMobile) this.classList.add("mobile")
   },
   listenResize() {
