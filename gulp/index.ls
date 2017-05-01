@@ -1,5 +1,5 @@
 global <<<< require \prelude-ls
-require! <[gulp gulp-plumber gulp-webserver gulp-watch gulp-babel gulp-pug run-sequence]>
+require! <[gulp gulp-plumber gulp-webserver gulp-watch gulp-babel gulp-pug gulp-stylus run-sequence]>
 {exec} = require \child_process
 K = (x, y)--> x
 arg = (n)-> -> &.(n)
@@ -15,10 +15,10 @@ gulp.task \serve, ->
   )
 
 gulp.task \build, (next)->
-  run-sequence <[es6 pug copy]>, next
+  run-sequence <[es6 pug styl copy]>, next
 
 gulp.task \watch, ->
-  <[es6 pug]>
+  <[es6 pug styl]>
   |> map (ext)->
     gulp-watch "#__dirname/../src/**/*.#ext", (K ext) >> gulp~start
   gulp-watch "#__dirname/../src/**/*.{png,jpg}", (K \copy) >> gulp~start
@@ -35,6 +35,13 @@ gulp.task \pug, ->
     .src "#__dirname/../src/**/*.pug"
     .pipe gulp-plumber!
     .pipe gulp-pug!
+    .pipe gulp.dest "#__dirname/../dist/"
+
+gulp.task \styl, ->
+  gulp
+    .src "#__dirname/../src/**/*.styl"
+    .pipe gulp-plumber!
+    .pipe gulp-stylus!
     .pipe gulp.dest "#__dirname/../dist/"
 
 gulp.task \copy, ->

@@ -1,65 +1,95 @@
 link(rel="import" href="../../bower_components/polymer/polymer.html")
 link(rel="import" href="../../bower_components/paper-input/paper-input.html")
 link(rel="import" href="../../bower_components/paper-button/paper-button.html")
+link(rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html")
+link(rel="import" href="../../bower_components/iron-icons/image-icons.html")
 link(rel="import" href="../interact-component/interact-component.html")
+script(src="../../bower_components/platform.js/platform.js")
 
 dom-module#nishiwaki-logo-composer
   template
-    style(is="custom-style").
-      :host {
-        display: block;
-      }
-      .container {
-        width: 425px;
-        height: 425px;
-        position: relative;
-        overflow: hidden;
-      }
-      .container .drop-range {
-        box-sizing: border-box;
-      }
-      .container .drop-range .drop-me {
-        color: #ccc;
-        margin-bottom: 50px;
-      }
-      .container[dragging] .drop-range {
-        border: 5px dashed #ccc;
-      }
-      .container canvas {
-        z-index: 2;
-        pointer-events: none;
-      }
-      .container:hover canvas {
-        opacity: 0.5;
-      }
-      .container .image {
-        position: absolute;
-        top: 64px;
-        left: 64px;
-        width: calc(100% - 128px);
-        height: calc(100% - 128px);
-        z-index: 1;
-      }
-      .container:not(:hover) .image {
-        overflow: hidden;
-      }
-      .container interact-component {
-        position: absolute;
-        top: -64px;
-        left: -64px;
-      }
-      paper-button {
-        background-color: var(--primary-color);
-        color: white;
-      }
+    style(is="custom-style")
+      :stylus
+        :host
+          display: block
+          --scale: 1
+          *
+            touch-action: none
+          .container
+            width: 425px
+            height: 425px
+            position: relative
+            overflow: hidden
+            .drop-range
+              box-sizing: border-box
+              z-index: 3
+              .drop-me
+                color: #ccc
+            canvas
+              z-index: 2
+            .image
+              position: absolute
+              top: 64px
+              left: 64px
+              width: calc(100% - 128px)
+              height: calc(100% - 128px)
+              z-index: 1
+              interact-component
+                position: absolute
+                top: -64px
+                left: -64px
+            &[dragging] .drop-range
+              border: 5px dashed #ccc
+          .actions
+            position: absolute
+            top: 0px
+            right: 0px
+            z-index: 4
+          &.mobile
+            .hidden-on-mobile
+              display: none
+            &.editor-mode
+              canvas
+                opacity: 0.5
+                pointer-events: none
+              .drop-range
+                pointer-events: none
+            &:not(.editor-mode)
+              .image
+                overflow: hidden
+          &:not(.mobile)
+            .hidden-on-not-mobile
+              display: none
+            canvas
+            .drop-range
+              pointer-events: none
+            > .container
+              &:hover canvas
+                opacity: 0.5
+              &:not(:hover)
+                .image
+                  overflow: hidden
+          paper-button.primary
+            background-color: var(--primary-color)
+            color: white
+          paper-icon-button.primary
+            color: var(--primary-color)
     .container(on-dragenter="setDragging" on-dragleave="unsetDragging" on-dragover="onDragover" on-drop="onDrop" dragging$="[[isDragging]]")
+      canvas#canvas.fit(width="425" height="425")
       .drop-range.layout.horizontal.center.center-justified.fit
-        .drop-me(hidden$="[[file]]") ここに画像をドロップ
-      canvas#canvas.fit(width="425", height="425")
-      .image
-        interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}")
-          img(src$="[[imageUrl]]")
+        .drop-me(hidden$="[[file]]").vertical.layout.center
+          .hidden-on-mobile ここに画像をドロップ
+          .hidden-on-mobile OR
+          .file
+            paper-input#fileInput(type="file" on-change="onFileSelected" hidden)
+            paper-button(raised on-tap="selectFile") Select
+      template(is="dom-if" if="[[file]]")
+        .image
+          interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" shows-resize-handler="[[]]")
+            img(src$="[[imageUrl]]")
+      .actions
+        paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode")
     .layout.vertical.center-justified
       paper-input(label="お名前" type="text" value="{{text}}")
-      paper-button(on-tap="download" raised) 画像をダウンロード
+      paper-button.primary(on-tap="download" raised) 画像をダウンロード
   script(src="./nishiwaki-logo-composer.js")

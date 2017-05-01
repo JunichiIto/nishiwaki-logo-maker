@@ -3,6 +3,7 @@ const baseSize = 425
 Polymer({
   is: "nishiwaki-logo-composer",
   properties: {
+    isMobile: {value: true},
     file: {
       value: null
     },
@@ -14,7 +15,14 @@ Polymer({
     },
     isDragging: {
       value: false
-    }
+    },
+    scale: {
+      value: 1
+    },
+    x: { value: 0 },
+    y: { value: 0 },
+    w: { value: 0 },
+    h: { value: 0 },
   },
   observers: [
     "drawLogo(logo)",
@@ -25,8 +33,23 @@ Polymer({
     "drawText(textImage)"
   ],
   attached() {
+    this.setMobile()
+    this.listenResize()
+    this.resize()
     this.setLogo()
     this.setCtx()
+  },
+  setMobile() {
+    const this.set("isMobile", ["Android", "iOS", "Windows Phone"].indexOf(platform.os.family) >= 0)
+    if (this.isMobile) this.classList.add("mobile")
+  },
+  listenResize() {
+    window.addEventListener("resize", this.resize.bind(this))
+  },
+  resize() {
+    const {min} = Math
+    const scale = min(1, this.parentNode.clientWidth / baseSize)
+    this.style.transform = `scale(${scale})`
   },
   setCtx() {
     const {$: {canvas}} = this
@@ -52,6 +75,15 @@ Polymer({
     this.drawImage(image, x, y, w, h)
     this.drawLogo(logo)
     this.createTextImage(text)
+  },
+  selectFile() {
+    this.$.fileInput.inputElement.click()
+  },
+  onFileSelected({target: {files: [file]}}) {
+    this.set("file", file)
+  },
+  toggleEditorMode() {
+    this.classList.toggle("editor-mode")
   },
   setImageUrl(file) {
     if (!file) return
