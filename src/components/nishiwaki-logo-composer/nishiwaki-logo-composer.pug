@@ -88,7 +88,7 @@ dom-module#nishiwaki-logo-composer
           interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" shows-resize-handler="[[]]")
             img(src$="[[imageUrl]]")
       .actions
-        paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode")
+        paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode" hidden="[[!file]]")
     .layout.vertical.center-justified
       paper-input(label="お名前" type="text" value="{{text}}")
       paper-button.primary(on-tap="download" raised) 画像をダウンロード
