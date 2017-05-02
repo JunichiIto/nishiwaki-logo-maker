@@ -3,7 +3,7 @@ const baseSize = 425
 Polymer({
   is: "nishiwaki-logo-composer",
   properties: {
-    isMobile: {value: true},
+    isMobile: {value: false},
     file: {
       value: null
     },
@@ -19,6 +19,7 @@ Polymer({
     scale: {
       value: 1
     },
+    rotationIndex: { value: 0 },
     x: { value: 0 },
     y: { value: 0 },
     w: { value: 0 },
@@ -27,11 +28,16 @@ Polymer({
   observers: [
     "drawLogo(logo)",
     "setImageUrl(file)",
-    "setImage(imageUrl)",
-    "setHandleSize(image)",
-    "render(ctx, logo, image, text, x, y, w, h)",
+    "setOriginalImage(imageUrl)",
+    "setRotatedImage(originalImage, rotationIndex)",
+    "setHandleSize(rotatedImage)",
+    "drawInteractCanvas(rotatedImage, w, h)",
+    "render(ctx, logo, rotatedImage, text, x, y, w, h)",
     "drawText(textImage)"
   ],
+  rotate() {
+    this.set("rotationIndex", this.rotationIndex + 1)
+  },
   attached() {
     this.setMobile()
     this.listenResize()
@@ -59,17 +65,23 @@ Polymer({
   clear() {
     this.ctx.clearRect(0, 0, baseSize, baseSize)
   },
-  setHandleSize(image) {
-    if (!image) return
-    const {width, height} = image
+  setHandleSize(rotatedImage) {
+    if (!rotatedImage) return
+    const {width, height} = rotatedImage
     const {min, max} = Math
     const rate = min(1, baseSize / max(width, height))
     this.set("w", width * rate)
     this.set("h", height * rate)
   },
-  render(ctx, logo, image, text, x, y, w, h) {
+  drawInteractCanvas(rotatedImage, w, h) {
+    if (!rotatedImage) return
+    const {interactCanvas} = this.$
+    const ctx = interactCanvas.getContext("2d")
+    ctx.drawImage(rotatedImage, 0, 0, w, h)
+  },
+  render(ctx, logo, rotatedImage, text, x, y, w, h) {
     this.clear()
-    this.drawImage(image, x, y, w, h)
+    this.drawImage(rotatedImage, x, y, w, h)
     this.drawLogo(logo)
     this.createTextImage(text)
   },
@@ -92,16 +104,44 @@ Polymer({
     }
     reader.readAsDataURL(file)
   },
-  setImage(imageUrl) {
+  setOriginalImage(imageUrl) {
     if (!imageUrl) return
     const image = new Image()
     image.onload = ()=> {
-      this.set("image", image)
+      this.set("originalImage", image)
     }
     image.src = imageUrl
   },
-  drawImage(image, x, y, w, h) {
-    if (!image) return
+  setRotatedImage(originalImage, rotationIndex) {
+    const canvas = document.createElement("canvas")
+    const isOdd = rotationIndex % 2 === 1
+    const index = rotationIndex % 4
+    const w = originalImage[isOdd ? "height" : "width"]
+    const h = originalImage[isOdd ? "width" : "height"]
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext("2d")
+    ctx.translate(...
+      (()=> {
+        switch (index) {
+          case 0: return [0, 0]
+          case 1: return [w, 0]
+          case 2: return [w, h]
+          case 3: return [0, h]
+        }
+      })()
+    )
+    ctx.rotate(Math.PI * (90 * index) / 180)
+    ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height)
+    const url = canvas.toDataURL()
+    const image = new Image()
+    image.src = url
+    image.onload = ()=> {
+      this.set("rotatedImage", image)
+    }
+  },
+  drawImage(rotatedImage, x, y, w, h) {
+    if (!rotatedImage) return
     const offsetRate = 0.15
     const offset = baseSize * offsetRate
     const maskSize = baseSize - offset * 2
@@ -110,7 +150,7 @@ Polymer({
     this.ctx.rect(offset, offset, maskSize, maskSize)
     this.ctx.closePath()
     this.ctx.clip()
-    this.ctx.drawImage(image, x, y, w, h)
+    this.ctx.drawImage(rotatedImage, x, y, w, h)
     this.ctx.restore()
   },
   setLogo(file) {
@@ -153,10 +193,14 @@ Polymer({
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   },
   download() {
+    if (this.isMobile) {
+      location.href = this.$.canvas.toDataURL()
+      return
+    }
     const a = document.createElement("a")
     a.href = this.$.canvas.toDataURL()
     a.download = `西脇市ロゴ ${this.text}.png`
-    a.style.display = "none"
+    a.target = "_blank"
     this.appendChild(a)
     a.click()
   },

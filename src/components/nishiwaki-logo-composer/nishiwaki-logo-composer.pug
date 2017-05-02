@@ -57,6 +57,8 @@ dom-module#nishiwaki-logo-composer
             &:not(.editor-mode)
               .image
                 overflow: hidden
+              .hidden-on-not-editor-mode
+                display: none
           &:not(.mobile)
             .actions
               display: none
@@ -87,11 +89,11 @@ dom-module#nishiwaki-logo-composer
           .file
             paper-input#fileInput(type="file" on-change="onFileSelected" hidden)
             paper-button(raised on-tap="selectFile") Select
-      template(is="dom-if" if="[[file]]")
-        .image
-          interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" shows-resize-handler="[[]]")
-            img(src$="[[imageUrl]]")
+      .image(hidden="[[!file]]")
+        interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" shows-resize-handler="[[]]")
+          canvas#interactCanvas(width$="[[w]]" height$="[[h]]")
       .actions
+        paper-icon-button.primary.hidden-on-not-editor-mode(icon="image:rotate-right" on-tap="rotate" hidden="[[!file]]")
         paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode" hidden="[[!file]]" toggles)
     .layout.vertical.center-justified
       paper-input(label="お名前" type="text" value="{{text}}")
