@@ -79,7 +79,7 @@ Polymer({
   selectFile() {
     this.$.fileInput.inputElement.click()
   },
-  onFileSelected({target: {files: [file]}}) {
+  onFileSelected({target: {inputElement: {files: [file]}}}) {
     this.set("file", file)
   },
   toggleEditorMode() {
