@@ -56,11 +56,6 @@ Polymer({
     const ctx = canvas.getContext("2d")
     this.set("ctx", ctx)
   },
-  setFile({target: {files}}) {
-    // NOTE: Safariとかやと、filesがイテレータブルじゃないから files: [file] みたいなことしたら怒られる
-    const file = files[0]
-    this.set("file", file)
-  },
   clear() {
     this.ctx.clearRect(0, 0, baseSize, baseSize)
   },
@@ -81,7 +76,9 @@ Polymer({
   selectFile() {
     this.$.fileInput.inputElement.click()
   },
-  onFileSelected({target: {files: [file]}}) {
+  onFileSelected({target: {files}}) {
+    // NOTE: Safariとかやと、files: [file] とかすると files がイテレータブルじゃないからと言われて怒られる
+    const file = files[0]
     this.set("file", file)
   },
   toggleEditorMode() {
