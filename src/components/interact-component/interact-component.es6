@@ -32,13 +32,15 @@ Polymer({
   ],
   setDraggable(draggable) {
     if (!draggable) return
-    interact(this).draggable({
+    // NOTE: interact()にエレメントを直接渡すとスマホ時にバグるのでセレクターを使用する
+    interact('interact-component', this.parentNode).draggable({
       onmove: this.onDragMove.bind(this)
     })
   },
   setResizable(resizable) {
     if (!resizable) return
-    interact(this).resizable({
+    // NOTE: interact()にエレメントを直接渡すとスマホ時にバグるのでセレクターを使用する
+    interact('interact-component', this.parentNode).resizable({
       preserveAspectRatio: true,
       edges: {top: true, right: true, bottom: true, left: true}
     }).on("resizemove", this.onResizeMove.bind(this))
