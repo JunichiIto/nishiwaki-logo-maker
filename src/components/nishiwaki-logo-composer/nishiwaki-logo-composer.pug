@@ -58,10 +58,11 @@ dom-module#nishiwaki-logo-composer
               .image
                 overflow: hidden
           &:not(.mobile)
+            .actions
+              display: none
             .hidden-on-not-mobile
               display: none
             canvas
-            .drop-range
               pointer-events: none
             > .container
               &:hover canvas
@@ -72,12 +73,15 @@ dom-module#nishiwaki-logo-composer
           paper-button.primary
             background-color: var(--primary-color)
             color: white
-          paper-icon-button.primary
-            color: var(--primary-color)
+          paper-icon-button
+            &.primary
+              color: var(--primary-color)
+            &[active]
+              color: var(--accent-color)
     .container(on-dragenter="setDragging" on-dragleave="unsetDragging" on-dragover="onDragover" on-drop="onDrop" dragging$="[[isDragging]]")
       canvas#canvas.fit(width="425" height="425")
-      .drop-range.layout.horizontal.center.center-justified.fit
-        .drop-me(hidden$="[[file]]").vertical.layout.center
+      .drop-range.layout.horizontal.center.center-justified.fit(hidden$="[[file]]")
+        .drop-me.vertical.layout.center
           .hidden-on-mobile ここに画像をドロップ
           .hidden-on-mobile OR
           .file
@@ -88,7 +92,7 @@ dom-module#nishiwaki-logo-composer
           interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" shows-resize-handler="[[]]")
             img(src$="[[imageUrl]]")
       .actions
-        paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode" hidden="[[!file]]")
+        paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode" hidden="[[!file]]" toggles)
     .layout.vertical.center-justified
       paper-input(label="お名前" type="text" value="{{text}}")
       paper-button.primary(on-tap="download" raised) 画像をダウンロード
