@@ -193,16 +193,7 @@ Polymer({
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   },
   download() {
-    if (this.isMobile) {
-      location.href = this.$.canvas.toDataURL()
-      return
-    }
-    const a = document.createElement("a")
-    a.href = this.$.canvas.toDataURL()
-    a.download = `西脇市ロゴ ${this.text}.png`
-    a.target = "_blank"
-    this.appendChild(a)
-    a.click()
+    canvasToImage("canvas")
   },
   onDragover(event) {
     event.preventDefault()
