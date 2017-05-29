@@ -3,13 +3,14 @@ const baseSize = 425
 Polymer({
   is: "nishiwaki-logo-composer",
   properties: {
-    isMobile: {value: false},
-    file: {
-      value: null
-    },
-    image: {
-      value: null
-    },
+    isMobile: { value: false },
+    logo: { value: null },
+    file: { value: null },
+    imageUrl: { value: null },
+    originalImage: { value: null },
+    rotatedImage: { value: null },
+    image: { value: null },
+    textImage: { value: null },
     text: {
       value: "西脇 太郎"
     },
@@ -26,14 +27,14 @@ Polymer({
     h: { value: 0 },
   },
   observers: [
-    "drawLogo(logo)",
+    "drawLogo(ctx, logo)",
     "setImageUrl(file)",
     "setOriginalImage(imageUrl)",
     "setRotatedImage(originalImage, rotationIndex)",
     "setHandleSize(rotatedImage)",
     "drawInteractCanvas(rotatedImage, w, h)",
     "render(ctx, logo, rotatedImage, text, x, y, w, h)",
-    "drawText(textImage)"
+    "drawText(ctx, textImage)"
   ],
   rotate() {
     this.set("rotationIndex", this.rotationIndex + 1)
@@ -80,10 +81,12 @@ Polymer({
     ctx.drawImage(rotatedImage, 0, 0, w, h)
   },
   render(ctx, logo, rotatedImage, text, x, y, w, h) {
-    this.clear()
-    this.drawImage(rotatedImage, x, y, w, h)
-    this.drawLogo(logo)
-    this.createTextImage(text)
+    this.debounce("render", ()=> {
+      this.clear()
+      this.drawImage(rotatedImage, x, y, w, h)
+      this.drawLogo(ctx, logo)
+      this.createTextImage(text)
+    }, 100)
   },
   selectFile() {
     this.$.fileInput.inputElement.click()
@@ -113,6 +116,7 @@ Polymer({
     image.src = imageUrl
   },
   setRotatedImage(originalImage, rotationIndex) {
+    if (!originalImage) return
     const canvas = document.createElement("canvas")
     const isOdd = rotationIndex % 2 === 1
     const index = rotationIndex % 4
@@ -160,8 +164,9 @@ Polymer({
     }
     image.src = "./components/nishiwaki-logo-composer/logo.png"
   },
-  drawLogo(logo) {
-    this.ctx.drawImage(logo, 0, 0, baseSize, baseSize)
+  drawLogo(ctx, logo) {
+    if (!logo) return
+    ctx.drawImage(logo, 0, 0, baseSize, baseSize)
   },
   createTextImage(text) {
     const canvas = document.createElement("canvas")
@@ -179,8 +184,8 @@ Polymer({
       this.set("textImage", image)
     }
   },
-  drawText(textImage) {
-    const {ctx} = this
+  drawText(ctx, textImage) {
+    if (!textImage) return
     const x = baseSize * 0.68
     const y = baseSize * 0.48
     const w = textImage.width
@@ -217,6 +222,9 @@ Polymer({
   unsetDragging(event) {
     event.preventDefault()
     event.stopPropagation()
+  },
+  openHelp() {
+    this.$.dialog.open()
   },
 })
 // TODO: リファクタ

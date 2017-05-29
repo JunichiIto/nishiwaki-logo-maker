@@ -3,6 +3,8 @@ link(rel="import" href="../../bower_components/paper-input/paper-input.html")
 link(rel="import" href="../../bower_components/paper-button/paper-button.html")
 link(rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html")
 link(rel="import" href="../../bower_components/iron-icons/image-icons.html")
+link(rel="import" href="../../bower_components/iron-icons/iron-icons.html")
+link(rel="import" href="../../bower_components/paper-dialog/paper-dialog.html")
 link(rel="import" href="../interact-component/interact-component.html")
 script(src="../../bower_components/platform.js/platform.js")
 script(src="../../bower_components/canvas-to-image/js/canvas-to-image.min.js")
@@ -76,11 +78,21 @@ dom-module#nishiwaki-logo-composer
           paper-button.primary
             background-color: var(--primary-color)
             color: white
-          paper-icon-button
+          paper-icon-button, iron-icon
             &.primary
               color: var(--primary-color)
-            &[active]
+            &[active], &.active
               color: var(--accent-color)
+          .help
+            text-align: right
+            padding: 0.5rem 0
+            color: #bbb
+          #dialog
+            min-width: 400px
+            margin: 0
+            ul
+              padding-left: 20px
+              line-height: 200%
     .container(on-dragenter="setDragging" on-dragleave="unsetDragging" on-dragover="onDragover" on-drop="onDrop" dragging$="[[isDragging]]")
       canvas#canvas.fit(width="425" height="425")
       .drop-range.layout.horizontal.center.center-justified.fit(hidden$="[[file]]")
@@ -96,7 +108,31 @@ dom-module#nishiwaki-logo-composer
       .actions
         paper-icon-button.primary.hidden-on-not-editor-mode(icon="image:rotate-right" on-tap="rotate" hidden="[[!file]]")
         paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode" hidden="[[!file]]" toggles)
+    .help(hidden="[[!file]]")
+      a(on-tap="openHelp")
+        iron-icon(icon="help")
+        | 操作方法
     .layout.vertical.center-justified
       paper-input(label="お名前" type="text" value="{{text}}")
       paper-button.primary(on-tap="download" raised) 画像をダウンロード
+    paper-dialog#dialog
+      h2 操作方法
+      main
+        ul
+          li
+            iron-icon.primary(icon="image:transform")
+            | をタップで画像編集モード開始
+          li
+            | 画像編集モードでは以下のことができます
+            ul
+              li 画像の中心付近をドラッグで位置調整
+              li 画像の外周付近をドラッグで拡大縮小
+              li
+                iron-icon.primary(icon="image:rotate-right")
+                | をタップで90度右回転
+          li
+            iron-icon.primary.active(icon="image:transform")
+            | をタップで画像編集モード終了
+      .buttons
+        paper-button(dialog-confirm autofocus) 閉じる
   script(src="./nishiwaki-logo-composer.js")
