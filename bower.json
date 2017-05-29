@@ -28,6 +28,7 @@
     "interactjs": "~1.2.8",
     "platform.js": "platform#~1.3.4",
     "canvas-to-image": "*",
-    "paper-dialog": "PolymerElements/paper-dialog#~2.0.0"
+    "paper-dialog": "PolymerElements/paper-dialog#~2.0.0",
+    "paper-spinner": "PolymerElements/paper-spinner#~2.0.0"
   }
 }

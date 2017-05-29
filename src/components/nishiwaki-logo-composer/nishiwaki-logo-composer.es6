@@ -4,6 +4,7 @@ Polymer({
   is: "nishiwaki-logo-composer",
   properties: {
     isMobile: { value: false },
+    isUploadingFile: { value: false },
     logo: { value: null },
     file: { value: null },
     imageUrl: { value: null },
@@ -25,6 +26,7 @@ Polymer({
     y: { value: 0 },
     w: { value: 0 },
     h: { value: 0 },
+    scale: { value: 1 },
   },
   observers: [
     "drawLogo(ctx, logo)",
@@ -56,6 +58,7 @@ Polymer({
   resize() {
     const {min} = Math
     const scale = min(1, this.parentNode.clientWidth / baseSize)
+    this.set("scale", scale)
     this.style.transform = `scale(${scale})`
   },
   setCtx() {
@@ -81,12 +84,10 @@ Polymer({
     ctx.drawImage(rotatedImage, 0, 0, w, h)
   },
   render(ctx, logo, rotatedImage, text, x, y, w, h) {
-    this.debounce("render", ()=> {
-      this.clear()
-      this.drawImage(rotatedImage, x, y, w, h)
-      this.drawLogo(ctx, logo)
-      this.createTextImage(text)
-    }, 100)
+    this.clear()
+    this.drawImage(rotatedImage, x, y, w, h)
+    this.drawLogo(ctx, logo)
+    this.createTextImage(text)
   },
   selectFile() {
     this.$.fileInput.inputElement.click()
@@ -94,6 +95,7 @@ Polymer({
   onFileSelected({target: {files}}) {
     // NOTE: Safariとかやと、files: [file] とかすると files がイテレータブルじゃないからと言われて怒られる
     const file = files[0]
+    this.set("isUploadingFile", true)
     this.set("file", file)
   },
   toggleEditorMode() {

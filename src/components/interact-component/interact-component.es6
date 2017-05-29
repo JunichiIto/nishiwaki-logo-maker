@@ -23,6 +23,9 @@ Polymer({
       value: 0,
       notify: true
     },
+    scale: {
+      value: 1
+    },
   },
   observers: [
     "setDraggable(draggable)",
@@ -54,8 +57,8 @@ Polymer({
   onResizeMove({target, rect: {width, height}, deltaRect: {left, top}}) {
     this.set("x", this.x + left)
     this.set("y", this.y + top)
-    this.set("w", width)
-    this.set("h", height)
+    this.set("w", width / this.scale)
+    this.set("h", height / this.scale)
   },
   setTranslation(x, y) {
     if (!this.style) return

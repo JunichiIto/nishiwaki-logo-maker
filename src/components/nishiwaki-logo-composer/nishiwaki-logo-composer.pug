@@ -5,6 +5,7 @@ link(rel="import" href="../../bower_components/paper-icon-button/paper-icon-butt
 link(rel="import" href="../../bower_components/iron-icons/image-icons.html")
 link(rel="import" href="../../bower_components/iron-icons/iron-icons.html")
 link(rel="import" href="../../bower_components/paper-dialog/paper-dialog.html")
+link(rel="import" href="../../bower_components/paper-spinner/paper-spinner.html")
 link(rel="import" href="../interact-component/interact-component.html")
 script(src="../../bower_components/platform.js/platform.js")
 script(src="../../bower_components/canvas-to-image/js/canvas-to-image.min.js")
@@ -16,8 +17,6 @@ dom-module#nishiwaki-logo-composer
         :host
           display: block
           --scale: 1
-          *
-            touch-action: none
           .container
             width: 425px
             height: 425px
@@ -52,6 +51,8 @@ dom-module#nishiwaki-logo-composer
             .hidden-on-mobile
               display: none
             &.editor-mode
+              *
+                touch-action: none
               canvas
                 opacity: 0.5
                 pointer-events: none
@@ -63,9 +64,10 @@ dom-module#nishiwaki-logo-composer
               .hidden-on-not-editor-mode
                 display: none
           &:not(.mobile)
+            .help
             .actions
-              display: none
             .hidden-on-not-mobile
+              display: none
               display: none
             canvas
               pointer-events: none
@@ -95,15 +97,17 @@ dom-module#nishiwaki-logo-composer
               line-height: 200%
     .container(on-dragenter="setDragging" on-dragleave="unsetDragging" on-dragover="onDragover" on-drop="onDrop" dragging$="[[isDragging]]")
       canvas#canvas.fit(width="425" height="425")
-      .drop-range.layout.horizontal.center.center-justified.fit(hidden$="[[file]]")
+      .drop-range.layout.horizontal.center.center-justified.fit(hidden$="[[rotatedImage]]")
         .drop-me.vertical.layout.center
           .hidden-on-mobile ここに画像をドロップ
           .hidden-on-mobile OR
           .file
             paper-input#fileInput(type="file" on-change="onFileSelected" hidden)
-            paper-button(raised on-tap="selectFile") Select
+            paper-button(raised on-tap="selectFile")
+              paper-spinner(active hidden="[[!isUploadingFile]]")
+              span(hidden="[[isUploadingFile]]") Select
       .image(hidden="[[!file]]")
-        interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" shows-resize-handler="[[]]")
+        interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" scale="[[scale]]" shows-resize-handler="[[]]")
           canvas#interactCanvas(width$="[[w]]" height$="[[h]]")
       .actions
         paper-icon-button.primary.hidden-on-not-editor-mode(icon="image:rotate-right" on-tap="rotate" hidden="[[!file]]")
