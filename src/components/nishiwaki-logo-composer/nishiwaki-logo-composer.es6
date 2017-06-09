@@ -200,7 +200,17 @@ Polymer({
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   },
   download() {
-    canvasToImage("canvas")
+    if (platform.os.family === "Android") {
+      const a = document.createElement("a")
+      a.href = this.$.canvas.toDataURL()
+      a.download = `西脇市ロゴ ${this.text}.png`
+      a.style.display = "none"
+      this.appendChild(a)
+      a.click()
+    }
+    else {
+      canvasToImage("canvas")
+    }
   },
   onDragover(event) {
     event.preventDefault()
