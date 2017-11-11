@@ -84,16 +84,17 @@ Polymer({
     ctx.drawImage(rotatedImage, 0, 0, w, h)
   },
   render(ctx, logo, rotatedImage, text, x, y, w, h) {
+    this.renderImage(ctx, logo, rotatedImage, x, y, w, h)
+    var image = this.createTextImage(text)
+    image.onload = ()=> {
+      this.renderImage(ctx, logo, rotatedImage, x, y, w, h)
+      this.set("textImage", image)
+    }
+  },
+  renderImage(ctx, logo, rotatedImage, x, y, w, h) {
     this.clear()
     this.drawImage(rotatedImage, x, y, w, h)
     this.drawLogo(ctx, logo)
-    var image = this.createTextImage(text)
-    image.onload = ()=> {
-      this.clear()
-      this.drawImage(rotatedImage, x, y, w, h)
-      this.drawLogo(ctx, logo)
-      this.set("textImage", image)
-    }
   },
   selectFile() {
     this.$.fileInput.inputElement.click()
