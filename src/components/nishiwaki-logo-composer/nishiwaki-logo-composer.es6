@@ -87,7 +87,13 @@ Polymer({
     this.clear()
     this.drawImage(rotatedImage, x, y, w, h)
     this.drawLogo(ctx, logo)
-    this.createTextImage(text)
+    var image = this.createTextImage(text)
+    image.onload = ()=> {
+      this.clear()
+      this.drawImage(rotatedImage, x, y, w, h)
+      this.drawLogo(ctx, logo)
+      this.set("textImage", image)
+    }
   },
   selectFile() {
     this.$.fileInput.inputElement.click()
@@ -182,9 +188,7 @@ Polymer({
     const url = canvas.toDataURL()
     const image = new Image()
     image.src = url
-    image.onload = ()=> {
-      this.set("textImage", image)
-    }
+    return image
   },
   drawText(ctx, textImage) {
     if (!textImage) return
