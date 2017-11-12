@@ -105,7 +105,7 @@ dom-module#nishiwaki-logo-composer
             paper-input#fileInput(type="file" on-change="onFileSelected" hidden)
             paper-button(raised on-tap="selectFile")
               paper-spinner(active hidden="[[!isUploadingFile]]")
-              span(hidden="[[isUploadingFile]]") Select
+              span(hidden="[[isUploadingFile]]") 画像選択
       .image(hidden="[[!file]]")
         interact-component(draggable resizable x="{{x}}" y="{{y}}" w="{{w}}" h="{{h}}" scale="[[scale]]" shows-resize-handler="[[]]")
           canvas#interactCanvas(width$="[[w]]" height$="[[h]]")
