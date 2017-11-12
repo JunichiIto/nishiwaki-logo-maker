@@ -27,6 +27,11 @@ html(lang="ja")
     link(rel="import" href="./components/nishiwaki-logo-composer/nishiwaki-logo-composer.html")
     style
       :stylus
+        .logo-wrapper
+          margin-right: 5px
+          background-color: #ffffff
+          border-radius: 18px
+          height: 35px
         main
           padding: 1rem
           h3
@@ -38,6 +43,8 @@ html(lang="ja")
   body.fullbleed.vertical.layout
     paper-header-panel
       paper-toolbar
+        .logo-wrapper
+          img(src="/logo.png" height="35" width="35")
         h2 ニシワキ ロゴメーカー
       main.layout.vertical
         section.layout.horizontal.center-justified
