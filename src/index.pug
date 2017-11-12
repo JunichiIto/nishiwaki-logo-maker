@@ -25,6 +25,8 @@ html(lang="ja")
     link(rel="import" href="./bower_components/paper-toolbar/paper-toolbar.html")
     link(rel="import" href="./bower_components/iron-flex-layout/iron-flex-layout-classes.html")
     link(rel="import" href="./components/nishiwaki-logo-composer/nishiwaki-logo-composer.html")
+
+    link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet", integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN", crossorigin="anonymous")
     style
       :stylus
         .paper-toolbar-0
@@ -48,6 +50,13 @@ html(lang="ja")
           .inquiry
             margin-top: 1.5em
             font-size: 12px
+          .source-code
+            margin-top: 1.5em
+            font-size: 10px
+            color: #666
+            a
+              text-decoration: none
+              color: #666
   body.fullbleed.vertical.layout
     paper-header-panel
       paper-toolbar
@@ -63,3 +72,8 @@ html(lang="ja")
           .inquiry
             | お問合せ先：
             a(href="http://www.city.nishiwaki.lg.jp/kakukanogoannai/toshikeieibu/jisedaisouseika/index.html" target="_blank") 西脇市役所次世代創生課
+        section.layout.horizontal.center-justified
+          .source-code
+            i(class="fa fa-github" aria-hidden="true")
+            | &nbsp;
+            a(href="https://github.com/JunichiIto/nishiwaki-logo-maker" target="_blank") JunichiIto/nishiwaki-logo-maker
