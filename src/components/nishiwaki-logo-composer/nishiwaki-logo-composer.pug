@@ -100,7 +100,7 @@ dom-module#nishiwaki-logo-composer
       .drop-range.layout.horizontal.center.center-justified.fit(hidden$="[[rotatedImage]]")
         .drop-me.vertical.layout.center
           .hidden-on-mobile ここに画像をドロップ
-          .hidden-on-mobile OR
+          .hidden-on-mobile または
           .file
             paper-input#fileInput(type="file" on-change="onFileSelected" hidden)
             paper-button(raised on-tap="selectFile")
@@ -117,7 +117,7 @@ dom-module#nishiwaki-logo-composer
         iron-icon(icon="help")
         | 操作方法
     .layout.vertical.center-justified
-      paper-input(label="お名前" type="text" value="{{text}}")
+      paper-input(label="おなまえ" type="text" value="{{text}}")
       paper-button.primary(on-tap="download" raised) 画像をダウンロード！
     paper-dialog#dialog
       h2 操作方法
