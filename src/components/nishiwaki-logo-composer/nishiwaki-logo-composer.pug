@@ -118,7 +118,9 @@ dom-module#nishiwaki-logo-composer
         | 操作方法
     .layout.vertical.center-justified
       paper-input(label="おなまえ" type="text" value="{{text}}")
-      paper-button.primary(on-tap="download" raised) 画像をダウンロード！
+      paper-button.primary(on-tap="download" raised)
+        i(class="fa fa-download" aria-hidden="true")
+        | &nbsp;画像をダウンロード！
     paper-dialog#dialog
       h2 操作方法
       main
