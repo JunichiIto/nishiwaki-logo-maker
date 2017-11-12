@@ -95,6 +95,10 @@ dom-module#nishiwaki-logo-composer
             ul
               padding-left: 20px
               line-height: 200%
+    .help(hidden="[[!file]]")
+      a(on-tap="openHelp")
+        iron-icon(icon="help")
+        | 操作方法
     .container(on-dragenter="setDragging" on-dragleave="unsetDragging" on-dragover="onDragover" on-drop="onDrop" dragging$="[[isDragging]]")
       canvas#canvas.fit(width="425" height="425")
       .drop-range.layout.horizontal.center.center-justified.fit(hidden$="[[rotatedImage]]")
@@ -112,10 +116,6 @@ dom-module#nishiwaki-logo-composer
       .actions
         paper-icon-button.primary.hidden-on-not-editor-mode(icon="image:rotate-right" on-tap="rotate" hidden="[[!file]]")
         paper-icon-button.primary(icon="image:transform" on-tap="toggleEditorMode" hidden="[[!file]]" toggles)
-    .help(hidden="[[!file]]")
-      a(on-tap="openHelp")
-        iron-icon(icon="help")
-        | 操作方法
     .layout.vertical.center-justified
       paper-input(label="おなまえ" type="text" value="{{text}}")
       paper-button.primary(on-tap="download" raised)
