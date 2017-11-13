@@ -58,6 +58,13 @@ html(lang="ja")
           background-color: #ffffff
           border-radius: 18px
           height: 35px
+        .movie-help
+          margin-bottom: 1.5em
+          font-size: 12px
+          color: #666
+          a
+            text-decoration: none
+            color: #666
         main
           padding: 1rem
           h3
@@ -85,6 +92,11 @@ html(lang="ja")
       main.layout.vertical
         section.layout.horizontal.center-justified
           h3 西脇市のロゴを使って、あなただけのアイコン画像を作成します。
+        section.layout.horizontal.center-justified
+          .movie-help
+            a(href="https://youtu.be/R8PkcZtWeks" target="_blank")
+              i(class="fa fa-youtube-play" aria-hidden="true")
+              | &nbsp;動画で使い方を見る
         section.flex.layout.horizontal.center-justified
           nishiwaki-logo-composer
         section.layout.horizontal.center-justified
