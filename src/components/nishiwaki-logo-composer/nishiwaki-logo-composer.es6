@@ -91,6 +91,13 @@ Polymer({
       this.set("textImage", image)
     }
   },
+  reverse(text) {
+    return text.split('').reverse().join('')
+  },
+  shuffle(text) {
+    const f = function() {return Math.random()-.5}
+    return text.split('').sort(f).join('')
+  },
   renderImage(ctx, logo, rotatedImage, x, y, w, h) {
     this.clear()
     this.drawImage(rotatedImage, x, y, w, h)
