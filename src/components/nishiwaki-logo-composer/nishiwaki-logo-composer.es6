@@ -86,6 +86,7 @@ Polymer({
   render(ctx, logo, rotatedImage, text, x, y, w, h) {
     this.renderImage(ctx, logo, rotatedImage, x, y, w, h)
     var image = this.createTextImage(text)
+    // var image = this.createTextImage(this.shuffle(text))
     image.onload = ()=> {
       this.renderImage(ctx, logo, rotatedImage, x, y, w, h)
       this.set("textImage", image)
